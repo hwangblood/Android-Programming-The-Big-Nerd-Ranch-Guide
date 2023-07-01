@@ -27,7 +27,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        binding.questionTextView.setOnClickListener {
+            Toast.makeText(
+                this, R.string.question_clicked_toast, Toast.LENGTH_SHORT
+            ).show()
+        }
         binding.trueButton.setOnClickListener { view: View ->
             checkAnswer(true)
         }
