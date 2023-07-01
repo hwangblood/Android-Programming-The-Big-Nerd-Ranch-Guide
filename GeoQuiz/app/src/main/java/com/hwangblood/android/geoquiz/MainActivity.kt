@@ -38,6 +38,19 @@ class MainActivity : AppCompatActivity() {
         binding.falseButton.setOnClickListener { view: View ->
             checkAnswer(false)
         }
+        binding.prevButton.setOnClickListener {
+            currentIndex = (currentIndex - 1) % questionBank.size
+            if (currentIndex < 0) {
+                currentIndex = 0
+                Toast.makeText(
+                    this,
+                    R.string.you_already_at_the_first_question_toast,
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                updateQuestion()
+            }
+        }
         binding.nextButton.setOnClickListener {
             currentIndex = (currentIndex + 1) % questionBank.size
             updateQuestion()
