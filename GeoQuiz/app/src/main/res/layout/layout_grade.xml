@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/grade_text"
+        style="?textAppearanceHeadline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@string/quiz_grade_message" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_padding_16dp" />
+
+    <Button
+        android:id="@+id/reset_quiz_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reset"
+        app:icon="@drawable/baseline_replay_24"
+        app:iconGravity="start" />
+</LinearLayout>

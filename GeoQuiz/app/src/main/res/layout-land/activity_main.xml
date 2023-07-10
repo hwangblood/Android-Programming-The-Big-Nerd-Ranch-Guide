@@ -1,49 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="@dimen/activity_padding">
+    android:padding="@dimen/activity_padding_16dp">
 
     <LinearLayout
+        android:id="@+id/layout_quiz"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:gravity="center">
 
-        <TextView
-            android:id="@+id/question_text_view"
+        <include
+            android:id="@+id/included_layout_quiz"
+            layout="@layout/layout_quiz"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="24dp"
-            tools:text="@string/question_australia" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/true_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/true_button" />
-
-            <View
-                android:layout_width="8dp"
-                android:layout_height="match_parent" />
-
-            <Button
-                android:id="@+id/false_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/false_button" />
-        </LinearLayout>
-
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <!--
@@ -51,6 +26,7 @@
     https://stackoverflow.com/a/33645246
     -->
     <LinearLayout
+        android:id="@+id/nav_button_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -74,5 +50,18 @@
             android:text="@string/next_button"
             app:icon="@drawable/arrow_right"
             app:iconGravity="end" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_grade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <include
+            android:id="@+id/included_layout_grade"
+            layout="@layout/layout_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>
