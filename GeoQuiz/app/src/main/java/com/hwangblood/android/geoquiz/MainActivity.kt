@@ -22,6 +22,9 @@ class MainActivity : AppCompatActivity() {
         Question(R.string.question_asia, true)
     )
 
+    // question todos list, false is uncompleted, ture is completed
+    private val questionTodos = MutableList(questionBank.size) { false }
+
     private var currentIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,9 +50,7 @@ class MainActivity : AppCompatActivity() {
             if (currentIndex < 0) {
                 currentIndex = 0
                 Toast.makeText(
-                    this,
-                    R.string.you_already_at_the_first_question_toast,
-                    Toast.LENGTH_SHORT
+                    this, R.string.you_already_at_the_first_question_toast, Toast.LENGTH_SHORT
                 ).show()
             } else {
                 updateQuestion()
@@ -91,6 +92,8 @@ class MainActivity : AppCompatActivity() {
     private fun updateQuestion() {
         val questionTextResId = questionBank[currentIndex].textResId
         binding.questionTextView.setText(questionTextResId)
+
+        updateAnswerButtons()
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
@@ -103,20 +106,35 @@ class MainActivity : AppCompatActivity() {
             Log.e(TAG, "Index was out of bounds", ex)
         }
 
-    val correctAnswer = questionBank[currentIndex].answer
-    val messageResId = if (correctAnswer == userAnswer) {
-        R.string.correct_toast
-    } else {
-        R.string.incorrect_toast
+        val correctAnswer = questionBank[currentIndex].answer
+        val messageResId = if (correctAnswer == userAnswer) {
+            R.string.correct_toast
+        } else {
+            R.string.incorrect_toast
+        }
+
+        // mark current question as completed, and update the answer buttons' state
+        questionTodos[currentIndex] = true
+        updateAnswerButtons()
+
+        Snackbar.make(
+            binding.root, messageResId, Snackbar.LENGTH_LONG
+        ).setAction(R.string.ok) {
+            Toast.makeText(
+                this, R.string.incorrect_toast, Toast.LENGTH_SHORT
+            ).show()
+        }.show()
     }
 
-    Snackbar.make(
-    binding.root, messageResId, Snackbar.LENGTH_LONG
-    ).setAction(R.string.ok)
-    {
-        Toast.makeText(
-            this, R.string.incorrect_toast, Toast.LENGTH_SHORT
-        ).show()
-    }.show()
-}
+    private fun updateAnswerButtons() {
+        if (questionTodos[currentIndex]) {
+            // question is completed, disable the answer buttons
+            binding.falseButton.isEnabled = false
+            binding.trueButton.isEnabled = false
+        } else {
+            // question is not completed, enable the answer buttons
+            binding.falseButton.isEnabled = true
+            binding.trueButton.isEnabled = true
+        }
+    }
 }
