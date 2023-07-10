@@ -1,6 +1,7 @@
 package com.hwangblood.android.geoquiz
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.hwangblood.android.geoquiz.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private val TAG = MainActivity::class.simpleName as String
 
     private lateinit var binding: ActivityMainBinding
 
@@ -24,6 +26,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate(Bundle?) called")
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -59,25 +63,60 @@ class MainActivity : AppCompatActivity() {
         updateQuestion()
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart() called")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume() called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause() called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop() called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy() called")
+    }
+
     private fun updateQuestion() {
         val questionTextResId = questionBank[currentIndex].textResId
         binding.questionTextView.setText(questionTextResId)
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
-        val correctAnswer = questionBank[currentIndex].answer
-        val messageResId = if (correctAnswer == userAnswer) {
-            R.string.correct_toast
-        } else {
-            R.string.incorrect_toast
+        // Log a message at DEBUG log level
+        Log.d(TAG, "Current question index: $currentIndex")
+        try {
+            val question = questionBank[-1]
+        } catch (ex: ArrayIndexOutOfBoundsException) {
+            // Log a message at ERROR log level along with an exception stack trace
+            Log.e(TAG, "Index was out of bounds", ex)
         }
 
-        Snackbar.make(
-            binding.root, messageResId, Snackbar.LENGTH_LONG
-        ).setAction(R.string.ok) {
-            Toast.makeText(
-                this, R.string.incorrect_toast, Toast.LENGTH_SHORT
-            ).show()
-        }.show()
+    val correctAnswer = questionBank[currentIndex].answer
+    val messageResId = if (correctAnswer == userAnswer) {
+        R.string.correct_toast
+    } else {
+        R.string.incorrect_toast
     }
+
+    Snackbar.make(
+    binding.root, messageResId, Snackbar.LENGTH_LONG
+    ).setAction(R.string.ok)
+    {
+        Toast.makeText(
+            this, R.string.incorrect_toast, Toast.LENGTH_SHORT
+        ).show()
+    }.show()
+}
 }
