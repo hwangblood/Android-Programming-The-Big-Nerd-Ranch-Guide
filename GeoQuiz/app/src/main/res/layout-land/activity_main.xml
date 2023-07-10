@@ -4,12 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/activity_padding_16dp">
 
     <LinearLayout
         android:id="@+id/layout_quiz"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:gravity="center">
 
         <include
@@ -17,13 +19,15 @@
             layout="@layout/layout_quiz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
-
     </LinearLayout>
 
+    <!--
+    How to give Space between Linear Layouts in android
+    https://stackoverflow.com/a/33645246
+    -->
     <LinearLayout
         android:id="@+id/nav_button_group"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
@@ -34,9 +38,10 @@
             app:icon="@drawable/arrow_left"
             app:iconGravity="start" />
 
-        <View
-            android:layout_width="8dp"
-            android:layout_height="match_parent" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/next_button"
