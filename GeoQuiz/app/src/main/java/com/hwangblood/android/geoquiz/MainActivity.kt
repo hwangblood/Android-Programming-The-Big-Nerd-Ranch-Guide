@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 updateQuestion()
             } else {
                 Toast.makeText(
-                    this, R.string.you_already_at_the_first_question_toast, Toast.LENGTH_SHORT
+                    this, R.string.can_not_move_to_prev_question_toast, Toast.LENGTH_SHORT
                 ).show()
             }
         }
@@ -94,7 +94,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateQuestion() {
-        binding.includedLayoutQuiz.questionTextView.setText(quizViewModel.currentQuestionTextResId)
+
+        binding.prevButton.isEnabled = !quizViewModel.isQuestionFirst
+        binding.nextButton.isEnabled = !quizViewModel.isQuestionLast
+
+        val questionTextMsg = getString(
+            R.string.question_text_message,
+            quizViewModel.currentQuestionNumber,
+            getString(quizViewModel.currentQuestionTextResId)
+        )
+        binding.includedLayoutQuiz.questionTextView.text = questionTextMsg
 
         updateAnswerButtons()
     }

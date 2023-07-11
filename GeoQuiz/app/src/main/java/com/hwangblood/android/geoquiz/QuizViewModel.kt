@@ -28,6 +28,9 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         get() = savedStateHandle[KEY_CURRENT_QUESTION_INDEX] ?: 0
         set(value) = savedStateHandle.set(KEY_CURRENT_QUESTION_INDEX, value)
 
+    val currentQuestionNumber: Int
+        get() = currentQuestionIndex + 1
+
     // question todos list, false is uncompleted, ture is completed
     private val questionTodos: MutableList<Boolean> = MutableList(questionBank.size) { false }
 
@@ -53,18 +56,28 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     val currentQuestionTextResId: Int
         get() = questionBank[currentQuestionIndex].textResId
 
+    val isQuestionFirst: Boolean
+        get() = currentQuestionIndex == 0
+
+    val isQuestionLast: Boolean
+        get() = currentQuestionIndex == (totalQuestionsCount - 1)
 
     fun moveToPrev(): Boolean {
-        currentQuestionIndex = (currentQuestionIndex - 1) % questionBank.size
-        if (currentQuestionIndex < 0) {
-            currentQuestionIndex = 0
+        if (isQuestionFirst) {
             return false
         }
+
+        currentQuestionIndex = (currentQuestionIndex - 1) % questionBank.size
+
         return true
     }
 
     fun moveToNext(): Boolean {
-        currentQuestionIndex = (currentQuestionIndex + 1) % questionBank.size
+        if (isQuestionLast) {
+            return false
+        }
+
+        currentQuestionIndex = (currentQuestionIndex + 1) % totalQuestionsCount
         Log.d(
             TAG,
             "CURRENT INDEX ${currentQuestionIndex >= 0 && currentQuestionIndex < questionBank.size}"
