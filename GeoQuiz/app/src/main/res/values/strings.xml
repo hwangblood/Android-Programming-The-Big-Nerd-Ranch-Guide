@@ -14,8 +14,10 @@
     <string name="next_button">Next</string>
     <string name="prev_button">Prev</string>
     <string name="question_clicked_toast">Question clicked!</string>
-    <string name="you_already_at_the_first_question_toast">You already at the first question</string>
     <string name="quiz_process_message">Quiz process: %d/%d</string>
     <string name="reset">Reset</string>
     <string name="quiz_grade_message">Grade: %d/%d</string>
+    <string name="can_not_move_to_prev_question_toast">Can not move to prev question</string>
+    <string name="can_not_move_to_next_question_toast">Can not move to next question</string>
+    <string name="question_text_message">%d: %s</string>
 </resources>
