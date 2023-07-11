@@ -18,4 +18,5 @@
     <string name="quiz_process_message">Quiz process: %d/%d</string>
     <string name="reset">Reset</string>
     <string name="quiz_grade_message">Grade: %d/%d</string>
+    <string name="can_not_move_to_next_question_toast">Can not move to next question</string>
 </resources>

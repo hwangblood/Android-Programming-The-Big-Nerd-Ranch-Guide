@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
 import com.hwangblood.android.geoquiz.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -13,23 +13,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val questionBank = listOf(
-        Question(R.string.question_australia, true),
-        Question(R.string.question_oceans, true),
-        Question(R.string.question_mideast, false),
-        Question(R.string.question_africa, false),
-        Question(R.string.question_americas, true),
-        Question(R.string.question_asia, true)
-    )
+    // not initialized until you access it
+    private val quizViewModel: QuizViewModel by viewModels()
 
-    // question todos list, false is uncompleted, ture is completed
-    private val questionTodos = MutableList(questionBank.size) { false }
-
-    private var currentIndex = 0
-
-    private var correctQuestionsCount = 0
-    private var completedQuestionsCount = 0
-    private val totalQuestionsCount = questionBank.size
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
 
         binding.includedLayoutQuiz.questionTextView.setOnClickListener {
             Toast.makeText(
@@ -50,27 +37,35 @@ class MainActivity : AppCompatActivity() {
             checkAnswer(false)
         }
         binding.prevButton.setOnClickListener {
-            currentIndex = (currentIndex - 1) % questionBank.size
-            if (currentIndex < 0) {
-                currentIndex = 0
+            val result = quizViewModel.moveToPrev()
+            if (result) {
+                updateQuestion()
+            } else {
                 Toast.makeText(
                     this, R.string.you_already_at_the_first_question_toast, Toast.LENGTH_SHORT
                 ).show()
-            } else {
-                updateQuestion()
             }
         }
         binding.nextButton.setOnClickListener {
-            currentIndex = (currentIndex + 1) % questionBank.size
-            updateQuestion()
+            val result = quizViewModel.moveToNext()
+            if (result) {
+                updateQuestion()
+            } else {
+                Toast.makeText(
+                    this, R.string.can_not_move_to_next_question_toast, Toast.LENGTH_SHORT
+                ).show()
+            }
         }
-
         binding.includedLayoutGrade.resetQuizButton.setOnClickListener {
             resetQuiz()
         }
 
         updateQuestion()
         updateQuizProcess()
+
+        if (quizViewModel.isQuizFinished) {
+            finishQuiz()
+        }
     }
 
     override fun onStart() {
@@ -99,53 +94,38 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateQuestion() {
-        val questionTextResId = questionBank[currentIndex].textResId
-        binding.includedLayoutQuiz.questionTextView.setText(questionTextResId)
+        binding.includedLayoutQuiz.questionTextView.setText(quizViewModel.currentQuestionTextResId)
 
         updateAnswerButtons()
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
-        // Log a message at DEBUG log level
-        Log.d(TAG, "Current question index: $currentIndex")
-        try {
-            // when currentIndex equals to 0, ArrayIndexOutOfBoundsException will happen
-            val question = questionBank[currentIndex - 1]
-            Log.d(TAG, "Current question $question")
-        } catch (ex: ArrayIndexOutOfBoundsException) {
-            // Log a message at ERROR log level along with an exception stack trace
-            Log.e(TAG, "Index was out of bounds", ex)
+        val result = quizViewModel.checkAnswer(userAnswer)
+
+        val messageResId = if (result) {
+            R.string.correct_toast
+        } else {
+            R.string.incorrect_toast
         }
 
-        val correctAnswer = questionBank[currentIndex].answer
-        var messageResId = R.string.incorrect_toast
-        if (correctAnswer == userAnswer) {
-            correctQuestionsCount = correctQuestionsCount.plus(1)
-            messageResId = R.string.correct_toast
-        }
-
-        // mark current question as completed, and update the answer buttons' state
-        questionTodos[currentIndex] = true
         updateAnswerButtons()
-        // update quiz process
-        completedQuestionsCount = questionTodos.count { it }
         updateQuizProcess()
 
         Toast.makeText(
             this, messageResId, Toast.LENGTH_SHORT
         ).show()
 
-        if (completedQuestionsCount == totalQuestionsCount) {
+        if (quizViewModel.isQuizFinished) {
             finishQuiz()
         }
     }
 
     private fun finishQuiz() {
-        val gradeMessage =
-            getString(R.string.quiz_grade_message, correctQuestionsCount, totalQuestionsCount)
-        Snackbar.make(
-            binding.root, gradeMessage, Snackbar.LENGTH_LONG
-        ).show()
+        val gradeMessage = getString(
+            R.string.quiz_grade_message,
+            quizViewModel.currentCorrectQuestionsCount,
+            quizViewModel.totalQuestionsCount
+        )
 
         binding.layoutQuiz.visibility = View.GONE
         binding.navButtonGroup.visibility = View.GONE
@@ -155,10 +135,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetQuiz() {
-        currentIndex = 0
-        completedQuestionsCount = 0
-        correctQuestionsCount = 0
-        questionTodos.fill(false)
+        quizViewModel.resetQuiz()
+
         updateQuestion()
         updateQuizProcess()
 
@@ -169,13 +147,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateQuizProcess() {
-        val quizProcessMessage =
-            getString(R.string.quiz_process_message, completedQuestionsCount, totalQuestionsCount)
+        val quizProcessMessage = getString(
+            R.string.quiz_process_message,
+            quizViewModel.currentCompletedQuestionsCount,
+            quizViewModel.totalQuestionsCount
+        )
         binding.includedLayoutQuiz.quizProcess.text = quizProcessMessage
     }
 
     private fun updateAnswerButtons() {
-        if (questionTodos[currentIndex]) {
+        if (quizViewModel.currentQuestionIsCompleted) {
             // question is completed, disable the answer buttons
             binding.includedLayoutQuiz.falseButton.isEnabled = false
             binding.includedLayoutQuiz.trueButton.isEnabled = false
