@@ -9,11 +9,12 @@ import androidx.lifecycle.ViewModel
  */
 class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
+    @Suppress("PrivatePropertyName")
+    private val TAG = QuizViewModel::class.simpleName as String
+
     companion object {
         const val KEY_CURRENT_QUESTION_INDEX = "KEY_CURRENT_QUESTION_INDEX"
     }
-
-    private val TAG = QuizViewModel::class.simpleName as String
 
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
@@ -77,11 +78,13 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
             return false
         }
 
-        currentQuestionIndex = (currentQuestionIndex + 1) % totalQuestionsCount
         Log.d(
             TAG,
-            "CURRENT INDEX ${currentQuestionIndex >= 0 && currentQuestionIndex < questionBank.size}"
+            "Updating question text",
+            Exception("Uncomment the next line to solve the misbehavior")
         )
+        currentQuestionIndex = (currentQuestionIndex + 1) % totalQuestionsCount
+
         return currentQuestionIndex >= 0 && currentQuestionIndex < questionBank.size
     }
 

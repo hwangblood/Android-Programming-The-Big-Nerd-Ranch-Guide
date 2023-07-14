@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.hwangblood.android.geoquiz.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    @Suppress("PrivatePropertyName")
     private val TAG = MainActivity::class.simpleName as String
 
     private lateinit var binding: ActivityMainBinding
@@ -16,13 +17,14 @@ class MainActivity : AppCompatActivity() {
     // not initialized until you access it
     private val quizViewModel: QuizViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // create view model at the time we use it
         Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
 
         binding.includedLayoutQuiz.questionTextView.setOnClickListener {

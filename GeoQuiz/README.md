@@ -41,3 +41,14 @@ TODO
 - Avoiding a Half-BakedSolution
 - Activity and InstanceState
 
+### Chapter 5: Debugging Android Apps
+
+- Exceptions and Stack Traces
+- Breakpoints
+- Android-Specific Debugging
+  - Android Lint
+  - Build issues
+- Conditional Breakpoints
+- Layout Inspector
+- Profiler
+
