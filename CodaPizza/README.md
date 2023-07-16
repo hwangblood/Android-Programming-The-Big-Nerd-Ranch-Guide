@@ -30,3 +30,10 @@ TODO
 - Coroutines, Flow, and Compose
 - Scrolling State
 - Inspecting Compose Layouts
+
+### Chapter 28: Showing Dialogs with Jetpack Compose
+
+- Showing a Dialog
+- Dismissing the Dialog
+- Setting the Dialog’s Content
+- Sending Results from a Dialog
