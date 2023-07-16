@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Coda Pizza</string>
 
-    <string name="place_order_button">Place Order</string>
+    <string name="place_order_button">Place Order (%1$s)</string>
 
     <string name="placement_none">None</string>
     <string name="placement_left">Left half</string>

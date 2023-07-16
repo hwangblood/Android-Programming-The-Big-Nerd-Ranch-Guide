@@ -26,12 +26,12 @@ fun ToppingCell(
 ) {
     Row(verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .clickable { /* TODO */ }
+            .clickable { onClickTopping() }
             .padding(vertical = 4.dp)
             .padding(end = 16.dp)) {
         Checkbox(
             checked = (placement != null),
-            onCheckedChange = { /* TODO */ },
+            onCheckedChange = { onClickTopping() },
         )
         Column(
             modifier = Modifier
