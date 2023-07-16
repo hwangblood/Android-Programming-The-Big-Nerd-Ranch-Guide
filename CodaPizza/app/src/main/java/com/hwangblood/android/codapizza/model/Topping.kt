@@ -1,4 +1,4 @@
-package com.hwangblood.android.codapizza.ui
+package com.hwangblood.android.codapizza.model
 
 import androidx.annotation.StringRes
 import com.hwangblood.android.codapizza.R

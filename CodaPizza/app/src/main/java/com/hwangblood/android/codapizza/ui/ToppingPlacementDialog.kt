@@ -16,6 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.hwangblood.android.codapizza.R
+import com.hwangblood.android.codapizza.model.Topping
+import com.hwangblood.android.codapizza.model.ToppingPlacement
 
 @Preview(showBackground = true)
 @Composable
